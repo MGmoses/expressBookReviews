@@ -20,7 +20,20 @@ regd_users.post("/login", (req,res) => {
   //Write your code here
   const username = req.body.username;
   const password =  req.body.password;
-  return res.status(300).json({message: "Yet to be implemented"});
+
+  if (!username || !password) {
+    return res.status(404).json({message:"Username and password are requried!"});
+  }
+
+  if (!authenticatedUser(username, password)) {
+    return res.status(404).json({message:"Invalid username or password"});
+  }
+
+  let accessToken = jwt.sign({username}, "access", {expiredIn: "1h"});
+
+  req.session.authorization = {accessToken, username};
+
+  return res.statu(200).json({message:"Customer sucessfully logged in", accessToken});
 });
 
 // Add a book review

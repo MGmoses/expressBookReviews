@@ -18,6 +18,8 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 //only registered users can login
 regd_users.post("/login", (req,res) => {
   //Write your code here
+  const username = req.body.username;
+  const password =  req.body.password;
   return res.status(300).json({message: "Yet to be implemented"});
 });
 

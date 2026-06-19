@@ -29,11 +29,11 @@ regd_users.post("/login", (req,res) => {
     return res.status(404).json({message:"Invalid username or password"});
   }
 
-  let accessToken = jwt.sign({username}, "access", {expiredIn: "1h"});
+  let accessToken = jwt.sign({username}, "access", {expiresIn: "1h"});
 
   req.session.authorization = {accessToken, username};
 
-  return res.statu(200).json({message:"Customer sucessfully logged in", accessToken});
+  return res.status(200).json({message:"Customer sucessfully logged in", accessToken});
 });
 
 // Add a book review

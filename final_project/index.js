@@ -16,7 +16,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
         let token = req.session.authorization['accessToken'];
 
         // Verify JWT token
-        jwt.verify(token, "acess", (err, user) => {
+        jwt.verify(token, "access", (err, user) => {
             if (!err) {
                 req.user = user;
                 next(); // Proceed to the next middleware
@@ -25,7 +25,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
             }
         });
     } else {
-        return re.status(403).json({ message: "User not logged in"});
+        return res.status(403).json({ message: "User not logged in"});
     }
 });
  

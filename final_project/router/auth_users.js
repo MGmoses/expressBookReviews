@@ -36,6 +36,10 @@ regd_users.post("/login", (req,res) => {
   return res.status(200).json({message:"Customer sucessfully logged in", accessToken});
 });
 
+// Check registered users
+regd_users.get("/users", (req, res) => {
+    return res.status(200).json(users);
+})
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here

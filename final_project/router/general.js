@@ -104,7 +104,7 @@ public_users.get('/title/:title',function (req, res) {
 public_users.get('/review/:isbn',function (req, res) {
     //Write your code here
     const isbn = req.params.isbn;
-    return res.send(JSON.stringify(books[isbn].reviews, null, 4));
+    return res.status(300).json({message: "Yet to be implemented"});
   });
   
 module.exports.general = public_users;

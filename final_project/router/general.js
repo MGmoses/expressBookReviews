@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios');
 
 
 public_users.post("/register", (req,res) => {
@@ -57,23 +58,22 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
 
-  new Promise((resolve, reject) => {
-    const matchingBooks = Object.keys(books)
-    .filter(isbn => books[isbn].author === author)
-    .map(isbn => books[isbn]);
+  axios.get('http://localhost:5000/')
+    .then((response) => {
+      const books = JSON.parse(response.data);
+      const matchingBooks = Object.keys(books)
+        .filter(isbn => books[isbn].author === author)
+        .map(isbn => books[isbn]);
 
-    if (matchingBooks.length > 0) {
-        resolve(matchingBooks);
-    } else {
-        reject("No books found for this author");
-    }
-  })
-  .then((matchingBooks) => {
-    return res.status(200).json(JSON.stringify(matchingBooks, null, 4));
-  })
-  .catch((err) => {
-    return res.status(404).json({message: err});
-  });
+      if (matchingBooks.length > 0) {
+        return res.status(200).json(matchingBooks);
+      } else {
+        return res.status(404).json({message: "No books found for this author"});
+      }
+    })
+    .catch((error) => {
+      return res.status(500).json({message: "Error fetching book data", error: error.message});
+    });
 });
 
 // Get all books based on title

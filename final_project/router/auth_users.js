@@ -16,24 +16,23 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 }
 
 //only registered users can login
-regd_users.post("/login", (req,res) => {
-  //Write your code here
+regd_users.post("/login", (req, res) => {
   const username = req.body.username;
-  const password =  req.body.password;
+  const password = req.body.password;
 
   if (!username || !password) {
-    return res.status(404).json({message:"Username and password are requried!"});
+    return res.status(404).json({message: "Username and password are required"});
   }
 
   if (!authenticatedUser(username, password)) {
-    return res.status(404).json({message:"Invalid username or password"});
+    return res.status(404).json({message: "Invalid username or password"});
   }
 
   let accessToken = jwt.sign({username}, "access", {expiresIn: "1h"});
 
   req.session.authorization = {accessToken, username};
 
-  return res.status(200).json({message:"Customer sucessfully logged in", accessToken});
+  return res.status(200).json({message: "User successfully logged in as an old user"});
 });
 
 // Check registered users
@@ -41,7 +40,7 @@ regd_users.get("/users", (req, res) => {
     return res.status(200).json(users);
 })
 // Add a book review
-regd_users.put("/auth/review/:isbn", (req, res) => {
+regd_users.put("/review/:isbn", (req, res) => {
   //Write your code here
   const isbn = req.params.isbn;
   const review = req.query.review;
@@ -57,11 +56,11 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
   books[isbn].reviews[username] = review;
 
-  return res.status(200).json({message:"Review successfully added", reviews: books[isbn].reviews});
+  return res.status(200).json({message:"Review successfully added/modified", reviews: books[isbn].reviews});
 });
 
 // Delete Book Review
-regd_users.delete("/auth/review/:isbn", (req, res) => {
+regd_users.delete("/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
     const username = req.session.authorization.username;
 

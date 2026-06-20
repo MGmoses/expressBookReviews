@@ -80,10 +80,24 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  const matchingBooks = Object.keys(books)
-  .filter(isbn => books[isbn].title === title)
-  .map(isbn => books[isbn]);
-  return res.send(JSON.stringify(matchingBooks, null, 4));
+  
+  new Promise((resolve, reject) => {
+    const matchingBooks = Object.keys(books)
+    .filter(isbn => books[isbn].title === title)
+    .map(isbn => books[isbn]);
+
+    if (matchingBooks.length > 0) {
+        resolve(matchingBooks);
+    } else {
+        reject("No books found with this title");
+    }
+  })
+  .then((matchingBooks) => {
+    return res.status(200).json(JSON.stringify(matchingBooks, null, 4));
+  })
+  .catch((err) => {
+    return res.status(404).json({message: err});
+  });
 });
 
 //  Get book review
